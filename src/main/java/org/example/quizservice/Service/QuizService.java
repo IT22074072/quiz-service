@@ -1,6 +1,7 @@
 package org.example.quizservice.Service;
 import org.example.quizservice.Model.Quiz;
 import org.example.quizservice.Model.Response;
+import org.example.quizservice.feign.QuizInterface;
 import org.example.quizservice.repo.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,17 @@ public class QuizService {
 //    @Autowired
 //    QuestionRepository questionRepo;
 
+    @Autowired
+    QuizInterface quizInterface;
 
     public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
-//       List<Integer> questions = //call the generate url - restTemplate http://localhost:8080/question/generate
-//        System.out.println("Questions found: " + questions.size()); // Debugging line
-//        Quiz quiz = new Quiz();
-//        quiz.setTitle(title);
-//        quiz.setQuestions(questions);
-//        quizRepo.save(quiz);
+
+        List<Integer> questions = quizInterface.getQuestionsForQuiz(category,numQ).getBody();
+        Quiz quiz = new Quiz();
+        quiz.setTitle(title);
+        quiz.setQuestionIds(questions);
+        quizRepo.save(quiz);
+
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
     }
 
