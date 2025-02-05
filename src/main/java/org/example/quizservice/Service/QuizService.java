@@ -37,17 +37,12 @@ public class QuizService {
     }
 
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(int id) {
-//        Optional<Quiz> quiz= quizRepo.findById(id);
-//        List<Question> questionsFromDB = quiz.get().getQuestions();
-       List<QuestionWrapper> questionsForUser = new ArrayList<>();
-//        for(Question q: questionsFromDB) {
-//
-//            QuestionWrapper qw = new QuestionWrapper(q.getId(), q.getQuestionTitle(),q.getOpt1(), q.getOpt2(), q.getOpt3(), q.getOpt4());
-//            questionsForUser.add(qw);
-//        }
-//
+          Quiz quiz= quizRepo.findById(id).get();
+          List<Integer> questionIds = quiz.getQuestionIds();
+          ResponseEntity<List<QuestionWrapper>> questions = quizInterface.getQuestionsFromId(questionIds);
 
-        return new ResponseEntity<>(questionsForUser, HttpStatus.OK);
+
+        return questions;
     }
 
     public ResponseEntity<Integer> calculateResult(int id, List<Response> responses) {
